@@ -1,0 +1,59 @@
+.wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+.toggleBtn {
+  background: none;
+  border: none;
+  border-radius: 12px;
+  padding: 0;
+  width: 36px;
+  height: 36px;
+  background: #7646ff;
+  color: #fff;
+  margin-left: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.iconSort {
+  width: 20px;
+  height: 20px;
+}
+
+.menu {
+  position: absolute;
+  top: 100%;
+  right: -42px;
+  background: white;
+  border-radius: 4px;
+  border-radius: 16px;
+  padding: 10px 20px;
+  margin-top: 4px;
+  width: 120px;
+  height: 94px;
+  z-index: 10;
+  box-shadow: 0 5px 28px 0 rgba(0, 0, 0, 0.15);
+}
+
+.menu li + li {
+  border-top: 1px solid #eee;
+}
+
+.menu button {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.5);
+}
+
+.menu button:hover,
+.menu .active {
+  color: #7646ff;
+}

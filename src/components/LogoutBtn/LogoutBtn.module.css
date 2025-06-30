@@ -1,0 +1,15 @@
+.logoutBtn {
+    border-radius: 16px;
+    padding: 0px 24px;
+    width: 152px;
+    height: 36px;
+    background: rgba(250, 74, 77, 0.4);
+    font-family: "Inter", sans-serif;
+    font-size: 20px;
+    color: #fff;
+    border: none;
+    padding: 6px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}

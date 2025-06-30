@@ -1,56 +1,55 @@
+import { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addMovie } from '../../redux/movies/slice';
+import { importMovies, fetchMovies } from '../../redux/movies/operations';
 import toast from 'react-hot-toast';
+import { CiImport } from 'react-icons/ci';
+import s from './ImportMovies.module.css';
 
-const ImportMovies = () => {
+const ImportMovies = ({ onImportSuccess }) => {
   const dispatch = useDispatch();
+  const inputRef = useRef(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleFileChange = async (e) => {
+  const handleFileChange = async e => {
     const file = e.target.files[0];
     if (!file) return;
 
-    const text = await file.text();
-    const movies = parseMovies(text);
+    try {
+      setLoading(true);
+      const text = await file.text();
+      const cleanedFile = new File([text], file.name, { type: 'text/plain' });
 
-    movies.forEach((movie) => {
-      dispatch(addMovie({
-        ...movie,
-        id: Date.now() + Math.random(),
-      }));
-    });
+      const result = await dispatch(importMovies(cleanedFile)).unwrap();
+      toast.success(`Imported ${result.meta?.imported} of ${result.meta?.total}`);
+      await dispatch(fetchMovies({ sort: 'title', order: 'ASC', limit: 10, offset: 0 })).unwrap();
 
-    toast.success(`Imported ${movies.length} movies`);
-  };
-
-  const parseMovies = (text) => {
-    const movieBlocks = text.split(/\n\s*\n/);
-    const movies = [];
-
-    for (const block of movieBlocks) {
-      const lines = block.split('\n');
-      const movie = {};
-
-      for (const line of lines) {
-        const [key, value] = line.split(':').map((s) => s.trim());
-
-        if (key === 'Title') movie.title = value;
-        if (key === 'Release Year') movie.year = Number(value);
-        if (key === 'Format') movie.format = value;
-        if (key === 'Stars') movie.actors = value.split(',').map((a) => a.trim());
-      }
-
-      if (movie.title && movie.year && movie.format && movie.actors) {
-        movies.push(movie);
-      }
+      onImportSuccess?.();
+    } catch (err) {
+      toast.error(err.message || 'Import failed');
+    } finally {
+      setLoading(false);
+      e.target.value = null;
     }
-
-    return movies;
   };
 
   return (
-    <div>
-      <h3>Import Movies from .txt</h3>
-      <input type="file" accept=".txt" onChange={handleFileChange} />
+    <div className={s.wrapper}>
+      <input
+        ref={inputRef}
+        type="file"
+        accept=".txt"
+        onChange={handleFileChange}
+        disabled={loading}
+        className={s.hidden}
+      />
+      <button
+        type="button"
+        onClick={() => inputRef.current.click()}
+        disabled={loading}
+        className={s.iconBtn}
+      >
+        <CiImport />
+      </button>
     </div>
   );
 };

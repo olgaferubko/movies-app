@@ -1,3 +1,6 @@
-export const selectMovies = (state) => state.movies.items;
-export const selectSearchQuery = (state) => state.movies.searchQuery;
-export const selectSortBy = (state) => state.movies.sortBy;
+export const selectMoviesState    = state => state.movies;
+export const selectAllMovies      = state => selectMoviesState(state).items || [];
+export const selectCurrentMovie   = state => selectMoviesState(state).current;
+export const selectMoviesLoading  = state => selectMoviesState(state).isLoading;
+export const selectMoviesError    = state => selectMoviesState(state).error;
+export const selectMoviesTotal    = state => selectMoviesState(state).total;

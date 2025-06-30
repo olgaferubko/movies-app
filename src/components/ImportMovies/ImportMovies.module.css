@@ -1,0 +1,24 @@
+.wrapper {
+  display: inline-block;
+  position: relative;
+}
+.hidden {
+  display: none;
+}
+.iconBtn {
+    background: #7646ff;
+    border: none;
+    border-radius: 12px;
+    padding: 6px;
+    width: 36px;
+    height: 36px;
+      font-size: 1.5rem;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.iconBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

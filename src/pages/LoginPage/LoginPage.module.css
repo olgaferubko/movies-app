@@ -1,0 +1,31 @@
+.loginPage {
+    min-height: 100vh;
+    min-width: 100vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-image: url('/Register.jpg');
+    background-size: cover;                  
+    background-position: center; 
+    background-repeat: no-repeat;
+    box-sizing: border-box;
+}
+
+.heading {
+    font-family: "Inter", sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    color: #fff;
+    margin-bottom: 4px;
+}
+
+.loginText {
+    font-family: "Inter", sans-serif;
+    font-weight: 600;
+    font-size: 20px;
+    text-align: center;
+    color: #fff;
+    margin-bottom: 16px;
+    width: 400px;
+}

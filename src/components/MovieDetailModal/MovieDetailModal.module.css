@@ -1,0 +1,65 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: #fff;
+  border-radius: 20px;
+  padding: 20px;
+  width: 372px;
+  position: relative;
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: #000;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  border: none;
+  font-size: 20px;
+  padding: 0;
+}
+
+.heading {
+  font-family: "Inter", sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: #000;
+  margin-bottom: 12px;
+}
+
+.detailsList {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.detailsItem {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: #000;
+}
+
+.actorList {
+  list-style: disc;
+  padding-left: 1.5rem;
+}
+
+.actorItem {
+  font-family: "Inter", sans-serif;
+  font-weight: 500;
+  font-size: 16px;
+  color: #000;
+}

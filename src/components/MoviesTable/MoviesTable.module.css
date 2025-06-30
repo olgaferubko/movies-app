@@ -1,0 +1,45 @@
+.tableWrapper {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.movieTable {
+    margin-top: 20px;
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: auto;
+}
+
+.columnWrapper {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.tableColumn {
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    color: #fff;
+    padding: 0;
+    width: 100%;
+    text-align: start;
+}
+
+.tableColumnActions {
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    color: #fff;
+    padding: 0;
+    width: 73px;
+    text-align: start;
+}
+
+.tableBody {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
