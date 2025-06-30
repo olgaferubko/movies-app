@@ -1,4 +1,4 @@
-import MovieRow from '../../components/MovieRow/MovieRow';
+import MovieRow from '../MovieRow/MovieRow';
 import s from './MoviesTable.module.css'
 
 const MoviesTable = ({ movies, onDelete, onOpenDetails, isLoading, detailLoading }) => {
@@ -14,7 +14,7 @@ const MoviesTable = ({ movies, onDelete, onOpenDetails, isLoading, detailLoading
           </tr>
         </thead>
         <tbody className={s.tableBody}>
-          {movies.map(movie => (
+          {(movies || []).map(movie => (
             <MovieRow
               key={movie.id}
               movie={movie}

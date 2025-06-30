@@ -6,12 +6,11 @@ import {
   selectMoviesLoading,
   selectMoviesError,
 } from '../../redux/movies/selectors';
-import LoadMoreButton from '../../components/LoadMoreButton/LoadMoreButton';
 import toast from 'react-hot-toast';
 
-import MovieSearchForm from '../../components/MovieSearchForm/MovieSearchForm';
-import MoviesTable from '../../components/MoviesTable/MoviesTable';
-import MovieDetailModal from '../../components/MovieDetailModal/MovieDetailModal';
+import MovieSearchForm from '../MovieSearchForm/MovieSearchForm';
+import MoviesTable from '../MoviesTable/MoviesTable';
+import MovieDetailModal from '../MovieDetailModal/MovieDetailModal';
 
 const MoviesList = () => {
   const dispatch = useDispatch();
@@ -19,67 +18,47 @@ const MoviesList = () => {
   const isLoading = useSelector(selectMoviesLoading);
   const error = useSelector(selectMoviesError);
 
-  const limit = 10;
-  const [offset, setOffset] = useState(0);
-  const [total, setTotal] = useState(null);
-
   const [searchTerm, setSearchTerm] = useState('');
-  const [order, setOrder] = useState('');  
+  const [order, setOrder] = useState('');
   const [detailMovie, setDetailMovie] = useState(null);
   const [detailLoading, setDetailLoading] = useState(false);
 
-  const buildParams = useCallback(
-    off => {
-      const params = { limit, offset: off };
-      if (searchTerm.trim()) params.search = searchTerm.trim();
-      if (order) {
-        params.sort  = 'title';
-        params.order = order;
-      }
-      return params;
-    },
-    [searchTerm, order]
-  );
+  const buildParams = useCallback(() => {
+    const params = {};
+    if (order)  { params.sort = 'title'; params.order = order; }
+    if (searchTerm)  params.search = searchTerm;
+    return params;
+  }, [order, searchTerm]);
 
   useEffect(() => {
-    setOffset(0);
-    dispatch(fetchMovies(buildParams(0)))
+    dispatch(fetchMovies(buildParams()))
       .unwrap()
-      .then(resp => {
-        setTotal(resp.total);
-      })
-      .catch(() => {});
+      .catch(err =>
+        toast.error(
+          typeof err === 'string'
+            ? err
+            : err.message || String(err)
+        )
+      );
   }, [dispatch, buildParams]);
 
-    useEffect(() => {
-      if (!error) return;
-      if (error === 'API error') {
-        return;
-      }
-        toast.error(error);
-    }, [error]);
-
-    const handleSearch = term => {
-    const t = term.trim();
-    if (t === '') {
-      setSearchTerm('');
-    } else if (t.length < 2) {
-      toast.error('Please enter at least 2 characters to search');
-    } else {
-      setSearchTerm(t);
+  useEffect(() => {
+    if (error) {
+      const msg = typeof error === 'string'
+        ? error
+        : error.message || JSON.stringify(error);
+      toast.error(msg);
     }
-  };
+  }, [error]);
+
+  const handleSearch = term => setSearchTerm(term.trim());
 
   const handleDelete = id => {
     dispatch(deleteMovie(id))
       .unwrap()
       .then(() => {
         toast.success('Movie deleted');
-        setOffset(0);
-        return dispatch(fetchMovies(buildParams(0))).unwrap();
-      })
-      .then(resp => {
-        setTotal(resp.total);
+        return dispatch(fetchMovies(buildParams())).unwrap();
       })
       .catch(() => toast.error('Failed to delete movie'));
   };
@@ -94,21 +73,6 @@ const MoviesList = () => {
     }
     setDetailLoading(false);
   };
-
-  const handleLoadMore = () => {
-    const nextOffset = offset + limit;
-    setOffset(nextOffset);
-    dispatch(fetchMovies(buildParams(nextOffset)))
-      .unwrap()
-      .then(resp => {
-        setTotal(resp.total);
-      })
-      .catch(() => {});
-  };
-
-  const hasMore = total === null
-    ? movies.length === limit
-    : movies.length < total;
 
   return (
     <div>
@@ -125,12 +89,6 @@ const MoviesList = () => {
         onOpenDetails={openDetails}
         isLoading={isLoading}
         detailLoading={detailLoading}
-      />
-
-      <LoadMoreButton
-        onClick={handleLoadMore}
-        disabled={isLoading}
-        hasMore={hasMore}
       />
 
       {detailMovie && (

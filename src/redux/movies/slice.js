@@ -19,79 +19,85 @@ const moviesSlice = createSlice({
   name: 'movies',
   initialState,
   reducers: {},
-  extraReducers: (builder) => {
+  extraReducers: builder => {
     builder
-      .addCase(fetchMovies.pending, (state) => {
+      .addCase(fetchMovies.pending, state => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(fetchMovies.fulfilled, (state, action) => {
+      .addCase(fetchMovies.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-        const { items, total, offset } = action.payload;
-        state.total = total;
-        state.items = offset > 0
-          ? state.items.concat(items)
-          : items;
+        const list = Array.isArray(payload)
+          ? payload
+          : Array.isArray(payload.data)
+            ? payload.data
+            : [];
+        state.items = list;
+        state.total = list.length;
       })
-      .addCase(fetchMovies.rejected, (state, action) => {
+      .addCase(fetchMovies.rejected, (state, { payload }) => {
         state.isLoading = false;
-        state.error = action.payload;
+        state.error = payload;
       })
 
-      .addCase(fetchMovieById.pending, (state) => {
+      .addCase(fetchMovieById.pending, state => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(fetchMovieById.fulfilled, (state, action) => {
+      .addCase(fetchMovieById.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-        state.current = action.payload;
+        state.current = payload;
       })
-      .addCase(fetchMovieById.rejected, (state, action) => {
+      .addCase(fetchMovieById.rejected, (state, { payload }) => {
         state.isLoading = false;
-        state.error = action.payload;
+        state.error = payload;
       })
 
-      .addCase(addMovie.pending, (state) => {
+      .addCase(addMovie.pending, state => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(addMovie.fulfilled, (state, action) => {
+      .addCase(addMovie.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-        state.items.unshift(action.payload);
+        state.items.unshift(payload);
         state.total += 1;
       })
-      .addCase(addMovie.rejected, (state, action) => {
+      .addCase(addMovie.rejected, (state, { payload }) => {
         state.isLoading = false;
-        state.error = action.payload;
+        state.error = payload;
       })
 
-      .addCase(deleteMovie.pending, (state) => {
+      .addCase(deleteMovie.pending, state => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(deleteMovie.fulfilled, (state, action) => {
+      .addCase(deleteMovie.fulfilled, (state, { payload: id }) => {
         state.isLoading = false;
-        state.items = state.items.filter((m) => m.id !== action.payload);
+        state.items = state.items.filter(m => m.id !== id);
         state.total -= 1;
       })
-      .addCase(deleteMovie.rejected, (state, action) => {
+      .addCase(deleteMovie.rejected, (state, { payload }) => {
         state.isLoading = false;
-        state.error = action.payload;
+        state.error = payload;
       })
 
-      .addCase(importMovies.pending, (state) => {
+      .addCase(importMovies.pending, state => {
         state.isLoading = true;
         state.error = null;
       })
-      .addCase(importMovies.fulfilled, (state, action) => {
+      .addCase(importMovies.fulfilled, (state, { payload }) => {
         state.isLoading = false;
-        const imported = action.payload;
+        const imported = Array.isArray(payload)
+          ? payload
+          : Array.isArray(payload.data)
+            ? payload.data
+            : [];
         state.items = state.items.concat(imported);
-        state.total += Array.isArray(imported) ? imported.length : 0;
+        state.total += imported.length;
       })
-      .addCase(importMovies.rejected, (state, action) => {
+      .addCase(importMovies.rejected, (state, { payload }) => {
         state.isLoading = false;
-        state.error = action.payload;
+        state.error = payload;
       });
   },
 });

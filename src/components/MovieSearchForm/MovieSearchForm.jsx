@@ -6,8 +6,14 @@ import AddMovieModal from '../AddMovieModal/AddMovieModal';
 import ImportMovies from '../ImportMovies/ImportMovies';
 import s from './MovieSearchForm.module.css';
 
-const MovieSearchForm = ({ order, setOrder, onSearch, onImportSuccess, isLoading }) => {
-  const [searchTerm, setSearchTerm] = useState('');
+const MovieSearchForm = ({
+  order,
+  setOrder,
+  onSearch,
+  onImportSuccess,
+  isLoading,
+}) => {
+  const [searchTerm, setSearchTerm]   = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
 
   const handleSubmit = e => {
@@ -33,7 +39,7 @@ const MovieSearchForm = ({ order, setOrder, onSearch, onImportSuccess, isLoading
             className={s.searchInput}
           />
           <button type="submit" disabled={isLoading} className={s.searchBtn}>
-            Search<IoIosSearch />
+            Search <IoIosSearch />
           </button>
           <SortDropdown order={order} setOrder={setOrder} />
         </div>

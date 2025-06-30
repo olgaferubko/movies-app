@@ -10,17 +10,17 @@ import s from './AddMovieModal.module.css';
 
 const AddMovieModal = ({ onClose }) => {
   const dispatch = useDispatch();
-  const [title, setTitle] = useState('');
-  const [year, setYear] = useState('');
+  const [title, setTitle]   = useState('');
+  const [year, setYear]     = useState('');
   const [format, setFormat] = useState('');
   const [actors, setActors] = useState('');
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState({});
+  const [errors, setErrors]   = useState({});
 
   const resetForm = () => {
     setTitle('');
     setYear('');
-    setFormat('DVD');
+    setFormat('');
     setActors('');
     setErrors({});
   };
@@ -38,9 +38,11 @@ const AddMovieModal = ({ onClose }) => {
         format,
         actors: actors.split(',').map(a => a.trim()).filter(Boolean),
       };
+
       setLoading(true);
       await dispatch(addMovie(newMovie)).unwrap();
-      await dispatch(fetchMovies({ sort: 'title', order: 'ASC', limit: 10, offset: 0 })).unwrap();
+      await dispatch(fetchMovies()).unwrap();
+
       toast.success('Movie successfully added!');
       resetForm();
       onClose();
@@ -69,7 +71,7 @@ const AddMovieModal = ({ onClose }) => {
         <form onSubmit={handleSubmit} className={s.form} noValidate>
           <h3 className={s.modalHeading}>Add a new movie</h3>
 
-          <label className={s.field}>
+          <div className={s.field}>
             <input
               value={title}
               onChange={e => setTitle(e.target.value)}
@@ -77,10 +79,10 @@ const AddMovieModal = ({ onClose }) => {
               placeholder="Title"
               className={s.input}
             />
-          </label>
-          {errors.title && <p className={s.error}>{errors.title}</p>}
+            {errors.title && <p className={s.error}>{errors.title}</p>}
+          </div>
 
-          <label className={s.field}>
+          <div className={s.field}>
             <input
               type="number"
               value={year}
@@ -89,32 +91,31 @@ const AddMovieModal = ({ onClose }) => {
               placeholder="Year"
               className={`${s.input} ${s.noSpinners}`}
             />
-          </label>
-          {errors.year && <p className={s.error}>{errors.year}</p>}
+            {errors.year && <p className={s.error}>{errors.year}</p>}
+          </div>
 
-          <div className={`${s.field} ${s.selectWrapper}`}>  
+          <div className={`${s.field} ${s.selectWrapper}`}>
             <CustomSelect
               value={format}
               onChange={setFormat}
               disabled={loading}
             />
+            {errors.format && <p className={s.error}>{errors.format}</p>}
           </div>
-          {errors.format && <p className={s.error}>{errors.format}</p>}
 
-          <label className={s.field}>
+          <div className={s.field}>
             <input
               value={actors}
               onChange={e => setActors(e.target.value)}
               disabled={loading}
-              placeholder="Actors"
+              placeholder="Actors (comma separated)"
               className={s.input}
             />
-          </label>
-          {errors.actors && <p className={s.error}>{errors.actors}</p>}
+            {errors.actors && <p className={s.error}>{errors.actors}</p>}
+          </div>
 
           <button
-            type="button"
-            onClick={handleSubmit}
+            type="submit"
             disabled={loading}
             className={s.submitBtn}
           >

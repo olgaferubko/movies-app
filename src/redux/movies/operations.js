@@ -3,23 +3,16 @@ import { moviesService } from '../../api/moviesApi';
 
 export const fetchMovies = createAsyncThunk(
   'movies/fetchMovies',
-    async (
-      params = { limit: 10, offset: 0 },
-      { rejectWithValue }
-    ) => {
+  async (params = {}, { rejectWithValue }) => {
     try {
-      const raw = await moviesService.listRaw(params);
-      return {
-        items: raw.data,
-        total: raw.meta.total,
-        limit: params.limit,
-        offset: params.offset,
-      };
+
+      const movies = await moviesService.list(params)
+      return movies;
     } catch (err) {
-      return rejectWithValue(err.message || err.toString());
+      return rejectWithValue(err.message || err.toString())
     }
   }
-);
+)
 
 export const fetchMovieById = createAsyncThunk(
   'movies/fetchMovieById',

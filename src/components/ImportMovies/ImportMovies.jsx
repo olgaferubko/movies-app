@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { importMovies, fetchMovies } from '../../redux/movies/operations';
+import { importMovies } from '../../redux/movies/operations';
 import toast from 'react-hot-toast';
 import { CiImport } from 'react-icons/ci';
 import s from './ImportMovies.module.css';
@@ -20,16 +20,15 @@ const ImportMovies = ({ onImportSuccess }) => {
       const cleanedFile = new File([text], file.name, { type: 'text/plain' });
 
       const result = await dispatch(importMovies(cleanedFile)).unwrap();
-      toast.success(`Imported ${result.meta?.imported} of ${result.meta?.total}`);
-      await dispatch(fetchMovies({ sort: 'title', order: 'ASC', limit: 10, offset: 0 })).unwrap();
-
+      const count = Array.isArray(result) ? result.length : 0;
+      toast.success(`Imported ${count} movie${count !== 1 ? 's' : ''}`);
       onImportSuccess?.();
-    } catch (err) {
-      toast.error(err.message || 'Import failed');
-    } finally {
-      setLoading(false);
-      e.target.value = null;
-    }
+      } catch (err) {
+        toast.error(err.message || 'Import failed');
+      } finally {
+        setLoading(false);
+        e.target.value = null;
+      }
   };
 
   return (
