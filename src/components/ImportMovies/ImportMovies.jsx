@@ -19,16 +19,17 @@ const ImportMovies = ({ onImportSuccess }) => {
       const text = await file.text();
       const cleanedFile = new File([text], file.name, { type: 'text/plain' });
 
-      const result = await dispatch(importMovies(cleanedFile)).unwrap();
-      const count = Array.isArray(result) ? result.length : 0;
+      const imported = await dispatch(importMovies(cleanedFile)).unwrap();
+      const count = Array.isArray(imported) ? imported.length : 0;
       toast.success(`Imported ${count} movie${count !== 1 ? 's' : ''}`);
+
       onImportSuccess?.();
-      } catch (err) {
-        toast.error(err.message || 'Import failed');
-      } finally {
-        setLoading(false);
-        e.target.value = null;
-      }
+    } catch (err) {
+      toast.error(err.message || 'Import failed');
+    } finally {
+      setLoading(false);
+      e.target.value = null;
+    }
   };
 
   return (

@@ -6,7 +6,7 @@ const MoviesPage = () => {
   return (
     <div className={s.container}>
       <header className={s.header}>
-        <h1 className={s.heading}>MovieShelf. Workspace</h1>
+        <h1 className={s.heading}>MovieShelf</h1>
         <LogoutBtn />
       </header>
       <MoviesList />

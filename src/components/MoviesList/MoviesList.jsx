@@ -8,9 +8,9 @@ import {
 } from '../../redux/movies/selectors';
 import toast from 'react-hot-toast';
 
-import MovieSearchForm from '../MovieSearchForm/MovieSearchForm';
-import MoviesTable from '../MoviesTable/MoviesTable';
-import MovieDetailModal from '../MovieDetailModal/MovieDetailModal';
+import MovieSearchForm from '../../components/MovieSearchForm/MovieSearchForm';
+import MoviesTable from '../../components/MoviesTable/MoviesTable';
+import MovieDetailModal from '../../components/MovieDetailModal/MovieDetailModal';
 
 const MoviesList = () => {
   const dispatch = useDispatch();
@@ -25,8 +25,14 @@ const MoviesList = () => {
 
   const buildParams = useCallback(() => {
     const params = {};
-    if (order)  { params.sort = 'title'; params.order = order; }
-    if (searchTerm)  params.search = searchTerm;
+    if (order)  { 
+      params.sort = 'title'; 
+      params.order = order; 
+    }
+    if (searchTerm) { 
+      params.search = searchTerm;
+    }
+    params.limit = 1000;
     return params;
   }, [order, searchTerm]);
 
@@ -51,7 +57,13 @@ const MoviesList = () => {
     }
   }, [error]);
 
-  const handleSearch = term => setSearchTerm(term.trim());
+  const handleImportSuccess = () => {
+    dispatch(fetchMovies(buildParams()));
+  };
+
+  const handleSearch = term => {
+    setSearchTerm(term.trim());
+  };
 
   const handleDelete = id => {
     dispatch(deleteMovie(id))
@@ -81,10 +93,12 @@ const MoviesList = () => {
         setOrder={setOrder}
         onSearch={handleSearch}
         isLoading={isLoading}
+        onImportSuccess={handleImportSuccess}
       />
 
       <MoviesTable
         movies={movies}
+        searchTerm={searchTerm}
         onDelete={handleDelete}
         onOpenDetails={openDetails}
         isLoading={isLoading}

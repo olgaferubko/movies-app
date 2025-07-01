@@ -4,26 +4,35 @@ import { IoAddOutline } from 'react-icons/io5';
 import SortDropdown from '../SortDropdown/SortDropdown';
 import AddMovieModal from '../AddMovieModal/AddMovieModal';
 import ImportMovies from '../ImportMovies/ImportMovies';
+import { toast } from 'react-hot-toast';
 import s from './MovieSearchForm.module.css';
+
+const MIN_SEARCH_LENGTH = 2;
 
 const MovieSearchForm = ({
   order,
   setOrder,
   onSearch,
-  onImportSuccess,
   isLoading,
+  onImportSuccess,
 }) => {
-  const [searchTerm, setSearchTerm]   = useState('');
+  const [searchTerm, setSearchTerm] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
 
   const handleSubmit = e => {
     e.preventDefault();
-    onSearch(searchTerm.trim());
-  };
+    const term = searchTerm.trim();
 
-  const handleAddSuccess = () => {
-    setShowAddModal(false);
-    onSearch(searchTerm.trim());
+    if (term.length === 0) {
+      return;
+    }
+
+    if (term.length < MIN_SEARCH_LENGTH) {
+      toast.error(`Too short, enter at least ${MIN_SEARCH_LENGTH} characters`);
+      return;
+    }
+
+    onSearch(term);
   };
 
   return (
@@ -39,7 +48,7 @@ const MovieSearchForm = ({
             className={s.searchInput}
           />
           <button type="submit" disabled={isLoading} className={s.searchBtn}>
-            Search <IoIosSearch />
+            Search<IoIosSearch />
           </button>
           <SortDropdown order={order} setOrder={setOrder} />
         </div>
@@ -61,7 +70,10 @@ const MovieSearchForm = ({
       {showAddModal && (
         <AddMovieModal
           onClose={() => setShowAddModal(false)}
-          onAddSuccess={handleAddSuccess}
+          onAddSuccess={() => {
+            setShowAddModal(false);
+            onSearch(searchTerm.trim());
+          }}
         />
       )}
     </>

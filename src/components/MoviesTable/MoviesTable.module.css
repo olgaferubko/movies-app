@@ -43,3 +43,15 @@
     gap: 8px;
     width: 100%;
 }
+
+
+.empty {
+    display: flex;
+    justify-content: center;
+    font-family: "Inter", sans-serif;
+    font-weight: 500;
+    font-size: 20px;
+    padding: 20px;
+    color: #fff;
+}
+

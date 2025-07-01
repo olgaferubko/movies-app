@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { addMovie, fetchMovies } from '../../redux/movies/operations';
+import { addMovie } from '../../redux/movies/operations';
 import toast from 'react-hot-toast';
 import { IoAddOutline } from 'react-icons/io5';
 import { RiCloseLargeLine } from 'react-icons/ri';
@@ -41,7 +41,6 @@ const AddMovieModal = ({ onClose }) => {
 
       setLoading(true);
       await dispatch(addMovie(newMovie)).unwrap();
-      await dispatch(fetchMovies()).unwrap();
 
       toast.success('Movie successfully added!');
       resetForm();
